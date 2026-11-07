@@ -1,0 +1,4 @@
+# one argument list per line: iters seed
+1000000 1
+1000000 2
+50000 123456

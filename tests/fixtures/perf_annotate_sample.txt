@@ -1,0 +1,11 @@
+ Percent |      Source code & Disassembly of branch_mispredict for cycles (41231 samples)
+---------------------------------------------------------------------------------------
+         :      sum_above():
+    0.00 :   401150:  xor    %eax,%eax
+    1.12 :   401152:  mov    (%rdi,%rcx,4),%edx
+   61.44 :   401155:  cmp    $0x7fffffff,%edx
+   35.20 :   40115b:  jbe    401160 <sum_above+0x10>
+    2.01 :   40115d:  add    %rdx,%rax
+    0.23 :   401160:  add    $0x1,%rcx
+    0.00 :   401164:  cmp    %rsi,%rcx
+    0.00 :   401167:  jne    401152 <sum_above+0x2>

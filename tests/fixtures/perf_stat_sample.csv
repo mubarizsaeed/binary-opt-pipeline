@@ -1,0 +1,10 @@
+# binary=branch_mispredict core=3
+# rep 1
+52418234911,,cycles,12041288431,100.00,,
+41118827212,,instructions,12041288431,100.00,0.78,insn per cycle
+8724411902,,branches,12041288431,100.00,,
+2101233841,,branch-misses,12041288431,100.00,24.09,of all branches
+68211011,,cache-references,12041288431,100.00,,
+20118822,,cache-misses,12041288431,100.00,29.49,of all cache refs
+<not supported>,,L1-dcache-load-misses,0,100.00,,
+19921023,,LLC-load-misses,12041288431,100.00,,
