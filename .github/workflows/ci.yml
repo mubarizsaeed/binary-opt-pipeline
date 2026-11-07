@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  kernels:
+    name: build + run calibration kernels
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: make -C benchmarks
+      - name: Quick run (small sizes)
+        run: |
+          benchmarks/branch_mispredict/bin/branch_mispredict 1000000 1 1
+          benchmarks/pointer_chase/bin/pointer_chase 100000 1 1000000
+          benchmarks/cache_aos/bin/cache_aos 100000 1 2
+          benchmarks/dep_chain/bin/dep_chain 10000000 1
+      - name: Determinism (same args, same checksum)
+        run: |
+          a=$(benchmarks/dep_chain/bin/dep_chain 1000000 7 | head -1)
+          b=$(benchmarks/dep_chain/bin/dep_chain 1000000 7 | head -1)
+          test "$a" = "$b"
+      - name: Stripped build
+        run: make -C benchmarks strip
+      - name: Verify oracle on identical binaries
+        run: python3 scripts/verify.py benchmarks/dep_chain/bin/dep_chain benchmarks/dep_chain/bin/dep_chain.stripped --inputs tests/fixtures/dep_chain_inputs.txt
+
+  pipeline:
+    name: python pipeline tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m unittest discover -s tests -v
+      - name: hotspots CLI on fixtures
+        run: |
+          python -m pipeline hotspots --report tests/fixtures/perf_report_sample.txt \
+            --stat tests/fixtures/perf_stat_sample.csv \
+            --annotate tests/fixtures/perf_annotate_sample.txt --addresses /tmp/addrs.txt
+          cat /tmp/addrs.txt
