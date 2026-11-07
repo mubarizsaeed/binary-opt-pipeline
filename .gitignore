@@ -1,0 +1,22 @@
+# build output
+benchmarks/**/bin/
+benchmarks/**/*.o
+*.out
+*.s
+# perf data
+perf.data*
+results/raw/
+*.perf
+# ghidra
+ghidra_projects/
+*.gpr
+*.rep/
+lifted/
+# python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/
+# editors
+.vscode/
+.idea/
